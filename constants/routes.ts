@@ -8,7 +8,6 @@ import {
 
 export const ROUTES_PATH = {
   dashboard: {
-    home: "/dashboard",
     accounts: "/dashboard/accounts",
     categories: "/dashboard/categories",
     overview: "/dashboard/overview",
