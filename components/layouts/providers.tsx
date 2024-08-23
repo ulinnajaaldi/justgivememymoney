@@ -15,6 +15,18 @@ import { Toaster } from "../ui/sonner";
 
 // In Next.js, this file would be called: app/providers.jsx
 
+// In Next.js, this file would be called: app/providers.jsx
+
+// In Next.js, this file would be called: app/providers.jsx
+
+// In Next.js, this file would be called: app/providers.jsx
+
+// In Next.js, this file would be called: app/providers.jsx
+
+// In Next.js, this file would be called: app/providers.jsx
+
+// In Next.js, this file would be called: app/providers.jsx
+
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -56,7 +68,12 @@ const Providers: React.FC<
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <div
+        vaul-drawer-wrapper=""
+        className="max-h-[100vh] min-h-[100vh] overflow-hidden bg-background"
+      >
+        {children}
+      </div>
       <Toaster />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
