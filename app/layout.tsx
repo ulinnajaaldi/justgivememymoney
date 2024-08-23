@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={publicSans.className}>
+        <body className={`${publicSans.className} antialiased`}>
           <Providers>{children}</Providers>
         </body>
       </html>
