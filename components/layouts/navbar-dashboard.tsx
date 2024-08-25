@@ -1,32 +1,43 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useMediaQuery } from "@/hook/useMediaQuery";
 import { useUser } from "@clerk/nextjs";
 import { LogOutIcon, MenuIcon } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Drawer } from "vaul";
 
 import Logo from "@/components/icons/Logo";
 import NavbarProfileButton from "@/components/layouts/navbar-profile-button";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 import { NAVIGATION_LIST, ROUTES_PATH } from "@/constants/routes";
 
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { cn } from "@/lib/utils";
 
 const NavbarDashboard: React.FC = () => {
   const { user } = useUser();
+  const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 980px)");
 
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const [isActive, setIsActive] = React.useState<string>("");
+
+  useEffect(() => {
+    setIsActive(pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <nav className="container fixed left-0 right-0 top-0 z-50 bg-white">
       {isMobile ? (
         <div className="my-3 flex items-center justify-between">
-          <Logo className="h-10 w-10" />
+          <Link href={ROUTES_PATH.home}>
+            <Logo className="h-10 w-10" />
+          </Link>
           <Drawer.Root
             direction="right"
             open={isDrawerOpen}
@@ -67,8 +78,14 @@ const NavbarDashboard: React.FC = () => {
                           <Link
                             key={`${item.title}-${index}`}
                             href={item.href}
-                            onClick={() => setIsDrawerOpen(false)}
-                            className="flex items-center justify-between rounded-md border-b p-3 hover:bg-gray-50"
+                            onClick={() => {
+                              setIsDrawerOpen(false);
+                              setIsActive(item.href);
+                            }}
+                            className={cn(
+                              "flex items-center justify-between rounded-md border-b p-3 hover:bg-gray-50",
+                              isActive === item.href ? "bg-gray-50" : "",
+                            )}
                           >
                             <span className="text-sm">{item.title}</span>
                             <item.icons className="mr-2 h-5 w-5 text-gray-900" />
@@ -97,10 +114,13 @@ const NavbarDashboard: React.FC = () => {
                 <Button
                   size="sm"
                   variant="link"
-                  className="my-2 rounded-full"
+                  className={cn(
+                    "my-2 rounded-full",
+                    isActive === item.href ? "underline" : "",
+                  )}
                   asChild
                 >
-                  <Link href={item.href}>
+                  <Link href={item.href} onClick={() => setIsActive(item.href)}>
                     <item.icons className="mr-2 h-5 w-5" />
                     {item.title}
                   </Link>
