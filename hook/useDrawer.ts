@@ -3,17 +3,19 @@
 import { create } from "zustand";
 
 interface DrawerState {
+  id?: string;
   isOpen: boolean;
   type: string | null;
-  openDrawer: (type: string) => void;
+  openDrawer: (type: string, id?: string) => void;
   closeDrawer: () => void;
 }
 
 const useDrawer = create<DrawerState>((set) => ({
-  isOpen: false,
+  id: undefined,
   type: null,
-  openDrawer: (type) => set({ isOpen: true, type }),
-  closeDrawer: () => set({ isOpen: false, type: null }),
+  isOpen: false,
+  openDrawer: (type, id) => set({ isOpen: true, type, id }),
+  closeDrawer: () => set({ isOpen: false, type: null, id: undefined }),
 }));
 
 export default useDrawer;
