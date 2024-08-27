@@ -3,6 +3,7 @@ import { HTTPException } from "hono/http-exception";
 import { handle } from "hono/vercel";
 
 import accounts from "@/server/Controllers/Accounts";
+import categories from "@/server/Controllers/Categories";
 
 const app = new Hono().basePath("/api");
 
@@ -14,7 +15,9 @@ app.onError((err, c) => {
   return c.json({ error: "Internal Server Error" }, 500);
 });
 
-const routes = app.route("/accounts", accounts);
+const routes = app
+  .route("/accounts", accounts)
+  .route("/categories", categories);
 
 export const GET = handle(app);
 export const POST = handle(app);
