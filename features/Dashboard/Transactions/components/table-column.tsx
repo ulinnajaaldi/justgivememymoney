@@ -6,6 +6,7 @@ import { id } from "date-fns/locale";
 import { InferResponseType } from "hono";
 import { ArrowUpDown } from "lucide-react";
 
+import TableColumnMissing from "@/components/common/table-column-missing";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -76,7 +77,15 @@ export const columns: ColumnDef<ResponseType>[] = [
       );
     },
     cell: ({ row }) => {
-      return <span>{row.original.category}</span>;
+      const category = row.original.category;
+
+      if (!category) {
+        return (
+          <TableColumnMissing id={row.original.id} title="Uncategorized" />
+        );
+      }
+
+      return <span>{category}</span>;
     },
   },
   {
@@ -122,6 +131,21 @@ export const columns: ColumnDef<ResponseType>[] = [
         >
           {formatCurrency(amount)}
         </span>
+      );
+    },
+  },
+  {
+    accessorKey: "account",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          className="pl-0 hover:bg-transparent"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Account
+          <ArrowUpDown className="ml-2 size-3" />
+        </Button>
       );
     },
   },

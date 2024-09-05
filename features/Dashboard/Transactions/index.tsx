@@ -81,10 +81,13 @@ const TransactionsFeature = () => {
     categoryMutation.isPending ||
     accountMutation.isPending;
 
-  const isFormLoading = categoryQuery.isLoading || accountQuery.isLoading;
-
   const isFormDeletePending =
     transactionsQuery.isLoading || deleteTransaction.isPending;
+
+  const isFormLoading =
+    categoryQuery.isLoading ||
+    accountQuery.isLoading ||
+    transactionQuery.isLoading;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

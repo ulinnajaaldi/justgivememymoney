@@ -39,7 +39,7 @@ const TableAction: React.FC<TableActionProps> = ({ id }) => {
 
   const [ConfirmDelete, confirm] = useConfirm(
     "Are you sure",
-    "You are about to perform a delete operation. This action cannot be undone.",
+    "You are about to delete the account. This action will delete all associated transactions and cannot be undone.",
   );
 
   return (
