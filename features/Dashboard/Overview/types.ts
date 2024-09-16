@@ -1,4 +1,20 @@
+import { VariantProps } from "class-variance-authority";
+import { LucideIcon } from "lucide-react";
+
 import type { ChartConfig } from "@/components/ui/chart";
+
+import { boxVariants, iconVariants } from "./config";
+
+export type IBoxVariants = VariantProps<typeof boxVariants>;
+export type IIconVariants = VariantProps<typeof iconVariants>;
+
+export interface DataCardProps extends IBoxVariants, IIconVariants {
+  title: string;
+  value?: number;
+  percentageChange?: number;
+  icon: LucideIcon;
+  dateRange: string;
+}
 
 export type ChartProps = {
   data?: {
@@ -9,7 +25,7 @@ export type ChartProps = {
   chartConfig: ChartConfig;
 };
 
-export type DataChartProps = {
+export type TransactionSectionProps = {
   data?: {
     date: string;
     income: number;
@@ -45,5 +61,4 @@ export type CurrentSectionProps = {
         expensesChange: number;
       }
     | undefined;
-  dateRangeLabel: string;
 };

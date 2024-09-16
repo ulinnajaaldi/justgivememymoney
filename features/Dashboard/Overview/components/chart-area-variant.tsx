@@ -59,9 +59,18 @@ const ChartAreaVariant: React.FC<ChartProps> = ({ data, chartConfig }) => {
         <ChartTooltip
           content={
             <ChartTooltipContent
-              labelFormatter={(value) =>
-                format(value, "MMM dd, y", { locale: id })
-              }
+              labelFormatter={(value) => {
+                try {
+                  const date = new Date(value);
+                  if (isNaN(date.getTime())) {
+                    throw new Error("Invalid date");
+                  }
+                  return format(date, "MMM dd, y", { locale: id });
+                } catch (error) {
+                  console.error("Invalid time value:", error);
+                  return "Invalid date";
+                }
+              }}
               indicator="dot"
             />
           }

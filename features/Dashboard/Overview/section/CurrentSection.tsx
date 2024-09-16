@@ -1,14 +1,21 @@
 import React from "react";
 
 import { Banknote, TrendingDown, TrendingUp } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+
+import { formatDateRange } from "@/lib/utils";
 
 import { DataCard } from "../components/data-card";
 import { CurrentSectionProps } from "../types";
 
-const CurrentSection: React.FC<CurrentSectionProps> = ({
-  data,
-  dateRangeLabel,
-}) => {
+const CurrentSection: React.FC<CurrentSectionProps> = ({ data }) => {
+  const params = useSearchParams();
+
+  const to = params.get("to") || undefined;
+  const from = params.get("from") || undefined;
+
+  const dateRangeLabel = formatDateRange({ to, from });
+
   return (
     <>
       <DataCard

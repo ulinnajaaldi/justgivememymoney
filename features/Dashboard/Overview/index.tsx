@@ -2,45 +2,47 @@
 
 import React from "react";
 
-import { useSearchParams } from "next/navigation";
+import FilterAccount from "@/components/common/filter-account";
+import FilterDate from "@/components/common/filter-date";
+import TitlePage from "@/components/common/title-page";
 
 import { useGetSummary } from "@/useCases/Summary";
 
-import { DataCardLoading } from "@/features/Dashboard/Overview/components/data-card";
-
-import { formatDateRange } from "@/lib/utils";
-
-import ChartTransaction from "./components/chart-transaction";
-import { CurrentSection, SpendingSection } from "./section";
+import {
+  CategoriesLoader,
+  TransactionsLoader,
+} from "./components/overview-loader";
+import { CurrentSection, SpendingSection, TransactionSection } from "./section";
 
 const OverviewFeature = () => {
-  const params = useSearchParams();
-  const to = params.get("to") || undefined;
-  const from = params.get("from") || undefined;
-
-  const dateRangeLabel = formatDateRange({ to, from });
-
   const { data, isLoading } = useGetSummary();
 
   return (
-    <main className="container mt-5 space-y-5">
+    <main className="container my-3 space-y-5 md:my-4 lg:my-5">
+      <TitlePage text="Overview" />
+
+      <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <FilterAccount />
+        <FilterDate disabled={isLoading} />
+      </div>
+
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-        {isLoading ? (
-          <>
-            <DataCardLoading />
-            <DataCardLoading />
-            <DataCardLoading />
-          </>
-        ) : (
-          <CurrentSection data={data} dateRangeLabel={dateRangeLabel} />
-        )}
+        <CurrentSection data={data} />
       </div>
       <div className="grid grid-cols-12 gap-5">
-        <div className="col-span-8">
-          <ChartTransaction data={data?.days} />
+        <div className="col-span-12 lg:col-span-8">
+          {isLoading ? (
+            <TransactionsLoader />
+          ) : (
+            <TransactionSection data={data?.days} />
+          )}
         </div>
-        <div className="col-span-4">
-          <SpendingSection data={data?.categories} />
+        <div className="col-span-12 lg:col-span-4">
+          {isLoading ? (
+            <CategoriesLoader />
+          ) : (
+            <SpendingSection data={data?.categories} />
+          )}
         </div>
       </div>
     </main>

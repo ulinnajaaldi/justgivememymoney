@@ -40,7 +40,7 @@ const SpendingSection: React.FC<DataChartProps> = ({ data }) => {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="xs:flex-row xs:items-center flex flex-col items-start justify-between gap-2 sm:gap-0">
           <CardTitle>Categories</CardTitle>
           <Select value={chartType} onValueChange={onChartTypeChange}>
             <SelectTrigger
@@ -68,12 +68,12 @@ const SpendingSection: React.FC<DataChartProps> = ({ data }) => {
       </CardHeader>
       <CardContent>
         {data?.length === 0 ? (
-          <div className="h-[350px]">
-            <FileSearch className="size-6 text-muted-foreground" />
+          <div className="xs:h-[350px] flex h-[200px] flex-col items-center justify-center text-muted-foreground">
+            <FileSearch className="size-6" />
             <p>No data for this period</p>
           </div>
         ) : (
-          <div className="h-[350px]">
+          <div className="xs:h-[350px] h-[200px]">
             {chartType === "pie" && (
               <ChartPieVariant data={data} chartConfig={chartConfig} />
             )}

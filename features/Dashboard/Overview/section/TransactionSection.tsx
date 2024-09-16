@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 import { AreaChartIcon, BarChart3, FileSearch, LineChart } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartConfig } from "@/components/ui/chart";
 import {
   Select,
   SelectContent,
@@ -14,22 +13,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { ChartAreaVariant, ChartBarVariant, ChartLineVariant } from ".";
-import { DataChartProps } from "../types";
+import {
+  ChartAreaVariant,
+  ChartBarVariant,
+  ChartLineVariant,
+} from "../components";
+import { chartConfig } from "../config";
+import { TransactionSectionProps } from "../types";
 
-const chartConfig = {
-  income: {
-    label: "Income",
-    color: "hsl(var(--chart-2))",
-  },
-  expenses: {
-    label: "Expenses",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig;
-
-const ChartTransaction: React.FC<DataChartProps> = ({ data }) => {
-  const [chartType, setChartType] = React.useState<string>("area");
+const TransactionSection: React.FC<TransactionSectionProps> = ({ data }) => {
+  const [chartType, setChartType] = useState<string>("area");
 
   const onChartTypeChange = (value: string) => {
     setChartType(value);
@@ -38,7 +31,7 @@ const ChartTransaction: React.FC<DataChartProps> = ({ data }) => {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="xs:flex-row xs:items-center flex flex-col items-start justify-between gap-2 sm:gap-0">
           <CardTitle>Transactions</CardTitle>
           <Select value={chartType} onValueChange={onChartTypeChange}>
             <SelectTrigger
@@ -72,8 +65,8 @@ const ChartTransaction: React.FC<DataChartProps> = ({ data }) => {
       </CardHeader>
       <CardContent>
         {data?.length === 0 ? (
-          <div className="h-[350px]">
-            <FileSearch className="size-6 text-muted-foreground" />
+          <div className="flex h-[350px] flex-col items-center justify-center text-muted-foreground">
+            <FileSearch className="size-6" />
             <p>No data for this period</p>
           </div>
         ) : (
@@ -94,4 +87,4 @@ const ChartTransaction: React.FC<DataChartProps> = ({ data }) => {
   );
 };
 
-export default ChartTransaction;
+export default TransactionSection;
