@@ -80,7 +80,7 @@ export function formatDateRange(period?: Period) {
   }
 
   if (period.to) {
-    return `${format(period.to, "LLL dd", { locale: id })} - ${format(period.to, "LLL dd, y", { locale: id })}`;
+    return `${format(period.from, "LLL dd", { locale: id })} - ${format(period.to, "LLL dd, y", { locale: id })}`;
   }
 
   return format(period.from, "LLL dd, y", { locale: id });
