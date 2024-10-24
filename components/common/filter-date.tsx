@@ -75,7 +75,7 @@ const FilterDate: React.FC<{
           <ChevronDown className="ml-2 h-5 w-5 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full" align="start">
+      <PopoverContent className="w-full" align="end">
         <Calendar
           initialFocus
           mode="range"

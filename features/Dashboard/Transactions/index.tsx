@@ -227,7 +227,7 @@ const TransactionsFeature = () => {
         </div>
       ) : (
         <DataTable
-          filterKey="date"
+          filterKey="paye"
           columns={columns}
           data={transactionsQuery.data || []}
           onDelete={(row) => {

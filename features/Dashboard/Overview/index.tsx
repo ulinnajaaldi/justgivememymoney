@@ -4,7 +4,6 @@ import React from "react";
 
 import FilterAccount from "@/components/common/filter-account";
 import FilterDate from "@/components/common/filter-date";
-import TitlePage from "@/components/common/title-page";
 
 import { useGetSummary } from "@/useCases/Summary";
 
@@ -19,11 +18,15 @@ const OverviewFeature = () => {
 
   return (
     <main className="container my-3 space-y-5 md:my-4 lg:my-5">
-      <TitlePage text="Overview" />
+      <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
+        <h1 className="text-xl font-semibold sm:text-2xl md:text-3xl">
+          Overview
+        </h1>
 
-      <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-        <FilterAccount />
-        <FilterDate disabled={isLoading} />
+        <div className="grid w-full grid-cols-2 items-center gap-4 sm:flex sm:w-auto">
+          <FilterAccount />
+          <FilterDate disabled={isLoading} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
