@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle, PlusIcon } from "lucide-react";
+import { Filter, FilterX, LoaderCircle, PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { DataTable } from "@/components/common/data-table";
+import FilterDate from "@/components/common/filter-date";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -49,6 +50,8 @@ const TransactionsFeature = () => {
     "Are you sure",
     "You are about to perform a delete operation. This action cannot be undone.",
   );
+
+  const [isFilter, setIsFilter] = useState(false);
 
   const mutation = useCreateTransaction();
   const editMutation = useEditTransaction(id);
@@ -166,37 +169,52 @@ const TransactionsFeature = () => {
 
   return (
     <main className="container mt-5">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold sm:text-2xl md:text-3xl">
+      <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center sm:gap-0">
+        <h1 className="text-2xl font-semibold sm:text-3xl">
           Transcations History
         </h1>
-        <Button
-          size="sm"
-          onClick={() => {
-            openDrawer("add-transactions");
-            form.reset({
-              accountId: "",
-              amount: "",
-              categoryId: "",
-              date: new Date(),
-              notes: "",
-              paye: "",
-            });
-          }}
-          disabled={isFormAddPending || isFormLoading}
-        >
-          {isFormLoading ? (
-            <>
-              <LoaderCircle className="mr-2 size-5 animate-spin" />
-              Loading
-            </>
-          ) : (
-            <>
-              <PlusIcon className="mr-2 size-5" />
-              Add New
-            </>
-          )}
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            size="sm"
+            variant={isFilter ? "default" : "outline"}
+            onClick={() => setIsFilter(!isFilter)}
+          >
+            {isFilter ? (
+              <FilterX className="mr-2 size-4" />
+            ) : (
+              <Filter className="mr-2 size-4" />
+            )}
+            Filter
+          </Button>
+          <Button
+            size="sm"
+            onClick={() => {
+              openDrawer("add-transactions");
+              form.reset({
+                accountId: "",
+                amount: "",
+                categoryId: "",
+                date: new Date(),
+                notes: "",
+                paye: "",
+              });
+            }}
+            disabled={isFormAddPending || isFormLoading}
+          >
+            {isFormLoading ? (
+              <>
+                <LoaderCircle className="mr-2 size-5 animate-spin" />
+                Loading
+              </>
+            ) : (
+              <>
+                <PlusIcon className="mr-2 size-5" />
+                Add New
+              </>
+            )}
+          </Button>
+        </div>
+
         <FormAddTransaction
           form={form}
           handleSubmit={handleSubmit}
@@ -220,6 +238,11 @@ const TransactionsFeature = () => {
           onCreateCategory={onCreateCategory}
         />
       </div>
+      {isFilter && (
+        <div className="mt-3 flex items-center justify-end">
+          <FilterDate />
+        </div>
+      )}
       <Separator className="mb-1 mt-5" />
       {transactionsQuery.isLoading ? (
         <div className="flex h-[20vh] animate-pulse items-center justify-center rounded-md bg-neutral-100">
