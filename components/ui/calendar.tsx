@@ -4,13 +4,7 @@ import * as React from "react";
 
 import { differenceInCalendarDays, format } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import {
-  DayPicker,
-  type DayPickerProps,
-  labelNext,
-  labelPrevious,
-  useDayPicker,
-} from "react-day-picker";
+import { DayPicker, type DayPickerProps, useDayPicker } from "react-day-picker";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 
@@ -351,7 +345,7 @@ function Calendar({
           );
         },
         MonthGrid: ({ className, children, ...props }) => {
-          const { goToMonth, selected } = useDayPicker();
+          const { goToMonth } = useDayPicker();
 
           if (navView === "years") {
             return (

@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
-import { bigint, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { bigint, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import * as z from "zod";
 
