@@ -1,10 +1,12 @@
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { parse, subDays } from "date-fns";
+import { endOfDay, startOfDay, subDays } from "date-fns";
 import { and, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import * as z from "zod";
+
+import { parseDate } from "@/lib/utils";
 
 import { db } from "../db";
 import {
@@ -39,10 +41,8 @@ const transactions = new Hono()
       const defaultTo = new Date();
       const defaultFrom = subDays(defaultTo, 30);
 
-      const startDate = from
-        ? parse(from, "yyyy-MM-dd", new Date())
-        : defaultFrom;
-      const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
+      const startDate = startOfDay(parseDate(from, defaultFrom));
+      const endDate = endOfDay(parseDate(to, defaultTo));
 
       const data = await db
         .select({

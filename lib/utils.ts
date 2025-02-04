@@ -1,11 +1,21 @@
 import { type ClassValue, clsx } from "clsx";
-import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
-import { id } from "date-fns/locale";
+import {
+  eachDayOfInterval,
+  endOfDay,
+  format,
+  isSameDay,
+  isValid,
+  parseISO,
+  startOfDay,
+  subDays,
+} from "date-fns";
+import { id as LOCALE_ID } from "date-fns/locale";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
 export function convertAmountToMiliUnit(amount: number) {
   return Math.round(amount * 1000);
 }
@@ -33,11 +43,7 @@ export function calculatePercentageChange(
 }
 
 export function fillMissingDays(
-  activeDays: {
-    date: Date;
-    income: number;
-    expenses: number;
-  }[],
+  activeDays: { date: Date; income: number; expenses: number }[],
   startDate: Date,
   endDate: Date,
 ) {
@@ -45,60 +51,56 @@ export function fillMissingDays(
     return [];
   }
 
-  const allDays = eachDayOfInterval({
-    start: startDate,
-    end: endDate,
-  });
+  const allDays = eachDayOfInterval({ start: startDate, end: endDate });
 
-  const transactionsByDay = allDays.map((day) => {
+  return allDays.map((day) => {
     const found = activeDays.find((d) => isSameDay(d.date, day));
-
-    if (found) {
-      return found;
-    } else
-      return {
-        date: day,
-        income: 0,
-        expenses: 0,
-      };
+    return found || { date: day, income: 0, expenses: 0 };
   });
-
-  return transactionsByDay;
 }
 
-type Period = {
-  from: string | Date | undefined;
-  to: string | Date | undefined;
-};
-
-export function formatDateRange(period?: Period) {
+export function formatDateRange(period?: {
+  from: string | Date;
+  to?: string | Date;
+}) {
   const defaultTo = new Date();
   const defaultFrom = subDays(defaultTo, 30);
 
-  if (!period?.from) {
-    return `${format(defaultFrom, "LLL dd", { locale: id })} - ${format(defaultTo, "LLL dd, y", { locale: id })}`;
-  }
+  const fromDate = period?.from
+    ? parseDate(period.from, defaultFrom)
+    : defaultFrom;
+  const toDate = period?.to ? parseDate(period.to, defaultTo) : defaultTo;
 
-  if (period.to) {
-    return `${format(period.from, "LLL dd", { locale: id })} - ${format(period.to, "LLL dd, y", { locale: id })}`;
-  }
-
-  return format(period.from, "LLL dd, y", { locale: id });
+  return `${format(fromDate, "LLL dd", { locale: LOCALE_ID })} - ${format(toDate, "LLL dd, y", { locale: LOCALE_ID })}`;
 }
 
 export function formatPercentage(
   value: number,
-  options: { addPrefix?: boolean } = {
-    addPrefix: false,
-  },
+  options: { addPrefix?: boolean } = {},
 ) {
   const result = new Intl.NumberFormat("id-ID", {
     style: "percent",
   }).format(value / 100);
 
-  if (options.addPrefix && value > 0) {
-    return `+ ${result}`;
-  }
+  return options.addPrefix && value > 0 ? `+ ${result}` : result;
+}
 
-  return result;
+export function parseDate(dateStr: string | Date | undefined, fallback: Date) {
+  if (!dateStr) return fallback;
+
+  if (dateStr instanceof Date) return dateStr;
+
+  const parsed = parseISO(dateStr.toString());
+
+  return isValid(parsed) ? parsed : fallback;
+}
+
+export function getDateRange(from?: string, to?: string) {
+  const defaultTo = new Date();
+  const defaultFrom = subDays(defaultTo, 30);
+
+  const startDate = startOfDay(parseDate(from, defaultFrom));
+  const endDate = endOfDay(parseDate(to, defaultTo));
+
+  return { startDate, endDate };
 }
