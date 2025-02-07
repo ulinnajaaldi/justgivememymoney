@@ -11,8 +11,8 @@ import { CurrentSectionProps } from "../types";
 const CurrentSection: React.FC<CurrentSectionProps> = ({ data }) => {
   const params = useSearchParams();
 
-  const to = params.get("to") || undefined;
-  const from = params.get("from") || undefined;
+  const to = params.get("to") || "";
+  const from = params.get("from") || "";
 
   const dateRangeLabel = formatDateRange({ to, from });
 
