@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Filter, FilterX, LoaderCircle, PlusIcon } from "lucide-react";
+import { LoaderCircle, PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -11,8 +11,6 @@ import { DataTable } from "@/components/common/data-table";
 import FilterDate from "@/components/common/filter-date";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-
-import { insertTransactionsSchema } from "@/server/schema";
 
 import { useCreateAccount, useGetAccounts } from "@/useCases/Account";
 import { useCreateCategory, useGetCategories } from "@/useCases/Category";
@@ -38,10 +36,7 @@ const formSchema = z.object({
   notes: z.string().nullable().optional(),
 });
 
-const apiFormSchema = insertTransactionsSchema.omit({ id: true });
-
 export type FormValues = z.infer<typeof formSchema>;
-export type APIFormValues = z.infer<typeof apiFormSchema>;
 
 const TransactionsFeature = () => {
   const { openDrawer, closeDrawer, id } = useDrawer();
@@ -50,8 +45,6 @@ const TransactionsFeature = () => {
     "Are you sure",
     "You are about to perform a delete operation. This action cannot be undone.",
   );
-
-  const [isFilter, setIsFilter] = useState(false);
 
   const mutation = useCreateTransaction();
   const editMutation = useEditTransaction(id);
@@ -174,18 +167,8 @@ const TransactionsFeature = () => {
           Transcations History
         </h1>
         <div className="flex items-center gap-3">
-          <Button
-            size="sm"
-            variant={isFilter ? "default" : "outline"}
-            onClick={() => setIsFilter(!isFilter)}
-          >
-            {isFilter ? (
-              <FilterX className="mr-2 size-4" />
-            ) : (
-              <Filter className="mr-2 size-4" />
-            )}
-            Filter
-          </Button>
+          <FilterDate />
+
           <Button
             size="sm"
             onClick={() => {
@@ -238,11 +221,6 @@ const TransactionsFeature = () => {
           onCreateCategory={onCreateCategory}
         />
       </div>
-      {isFilter && (
-        <div className="mt-3 flex items-center justify-end">
-          <FilterDate />
-        </div>
-      )}
       <Separator className="mb-1 mt-5" />
       {transactionsQuery.isLoading ? (
         <div className="flex h-[20vh] animate-pulse items-center justify-center rounded-md bg-neutral-100">
