@@ -89,7 +89,7 @@ export const columns: ColumnDef<ResponseType>[] = [
     },
   },
   {
-    accessorKey: "paye",
+    accessorKey: "payee",
     header: ({ column }) => {
       return (
         <Button

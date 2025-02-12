@@ -31,7 +31,7 @@ const formSchema = z.object({
   date: z.coerce.date(),
   accountId: z.string(),
   categoryId: z.string().nullable().optional(),
-  paye: z.string().min(1),
+  payee: z.string().min(1),
   amount: z.string().min(1),
   notes: z.string().nullable().optional(),
 });
@@ -93,7 +93,7 @@ const TransactionsFeature = () => {
       categoryId: "",
       date: new Date(),
       notes: "",
-      paye: "",
+      payee: "",
     },
   });
 
@@ -105,7 +105,7 @@ const TransactionsFeature = () => {
         categoryId: transactionQuery.data.categoryId,
         date: new Date(transactionQuery.data.date),
         notes: transactionQuery.data.notes,
-        paye: transactionQuery.data.paye,
+        payee: transactionQuery.data.payee,
       });
     }
   }, [transactionQuery.data, form]);
@@ -179,7 +179,7 @@ const TransactionsFeature = () => {
                 categoryId: "",
                 date: new Date(),
                 notes: "",
-                paye: "",
+                payee: "",
               });
             }}
             disabled={isFormAddPending || isFormLoading}
@@ -228,7 +228,7 @@ const TransactionsFeature = () => {
         </div>
       ) : (
         <DataTable
-          filterKey="paye"
+          filterKey="payee"
           columns={columns}
           data={transactionsQuery.data || []}
           onDelete={(row) => {

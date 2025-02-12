@@ -138,14 +138,14 @@ const FormAddCategory: React.FC<FormAddTransactionProps> = (props) => {
             />
             <FormField
               control={form.control}
-              name="paye"
+              name="payee"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Payee</FormLabel>
                   <FormControl>
                     <Input
                       disabled={disabled}
-                      placeholder="Add a payee"
+                      placeholder="Add a payeee"
                       autoComplete="off"
                       {...field}
                     />
