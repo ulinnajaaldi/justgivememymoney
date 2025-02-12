@@ -17,6 +17,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+import { useMediaQuery } from "@/hook/useMediaQuery";
+
 import { formatDateRange } from "@/lib/utils";
 
 const FilterDate: React.FC<{
@@ -32,6 +34,8 @@ const FilterDate: React.FC<{
 
   const defaultTo = new Date();
   const defaultFrom = subDays(defaultTo, 30);
+
+  const isMobile = useMediaQuery("(max-width: 980px)");
 
   const paramState = {
     from: from ? new Date(from) : defaultFrom,
@@ -82,7 +86,7 @@ const FilterDate: React.FC<{
           defaultMonth={date?.from}
           selected={date}
           onSelect={setDate}
-          numberOfMonths={2}
+          numberOfMonths={isMobile ? 1 : 2}
         />
         <div className="grid grid-cols-2 gap-5">
           <PopoverClose asChild>
