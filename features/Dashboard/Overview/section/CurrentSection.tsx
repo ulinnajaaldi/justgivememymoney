@@ -1,7 +1,12 @@
 import React from "react";
 
-import { Banknote, TrendingDown, TrendingUp } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+
+import {
+  HandCoinsIcon,
+  TrendingDownIcon,
+  TrendingUpIcon,
+} from "@/components/icons";
 
 import { formatDateRange } from "@/lib/utils";
 
@@ -22,7 +27,7 @@ const CurrentSection: React.FC<CurrentSectionProps> = ({ data }) => {
         title="Remaining"
         value={data?.remainingAmmount}
         percentageChange={data?.remainingChange}
-        icon={Banknote}
+        icon={<HandCoinsIcon className="text-blue-500" />}
         variant="default"
         dateRange={dateRangeLabel}
       />
@@ -30,15 +35,15 @@ const CurrentSection: React.FC<CurrentSectionProps> = ({ data }) => {
         title="Income"
         value={data?.incomeAmmount}
         percentageChange={data?.incomeChange}
-        icon={TrendingUp}
         variant="success"
         dateRange={dateRangeLabel}
+        icon={<TrendingUpIcon className="text-emerald-500" />}
       />
       <DataCard
         title="Expenses"
         value={data?.expensesAmmount}
         percentageChange={data?.expensesChange}
-        icon={TrendingDown}
+        icon={<TrendingDownIcon className="text-rose-500" />}
         variant="danger"
         dateRange={dateRangeLabel}
       />

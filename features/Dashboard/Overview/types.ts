@@ -12,7 +12,7 @@ export interface DataCardProps extends IBoxVariants, IIconVariants {
   title: string;
   value?: number;
   percentageChange?: number;
-  icon: LucideIcon;
+  icon?: React.ReactNode;
   dateRange: string;
 }
 

@@ -29,7 +29,7 @@ export const DataCard: React.FC<DataCardProps> = (props) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <div className="xs:space-y-2 space-y-1">
+        <div className="space-y-1 xs:space-y-2">
           <CardTitle className="line-clamp-1 text-xl md:text-2xl">
             {title}
           </CardTitle>
@@ -37,9 +37,7 @@ export const DataCard: React.FC<DataCardProps> = (props) => {
             {dateRange}
           </CardDescription>
         </div>
-        <div className={cn(boxVariants({ variant }))}>
-          <Icon className={cn(iconVariants({ variant }))} />
-        </div>
+        <div className={cn(boxVariants({ variant }))}>{Icon}</div>
       </CardHeader>
       <CardContent>
         <h1 className="line-clamp-1 break-all text-sm md:text-base">
