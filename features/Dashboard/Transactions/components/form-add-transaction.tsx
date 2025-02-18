@@ -54,7 +54,6 @@ const FormAddCategory: React.FC<FormAddTransactionProps> = (props) => {
       ) : (
         <Form {...form}>
           <form
-            // TODO: DELETE THIS
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-4"
           >

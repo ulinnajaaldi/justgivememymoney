@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
 import { LoaderCircle, PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -119,6 +120,7 @@ const TransactionsFeature = () => {
         ...values,
         amount: ammountInMiliUnit,
         categoryId: values.categoryId ?? "",
+        date: new Date(format(values.date, "yyyy-MM-dd")),
       },
       {
         onSuccess: () => {
@@ -138,6 +140,7 @@ const TransactionsFeature = () => {
         ...values,
         amount: ammountInMiliUnit,
         categoryId: values.categoryId ?? "",
+        date: new Date(format(values.date, "yyyy-MM-dd")),
       },
       {
         onSuccess: () => {
