@@ -55,7 +55,7 @@ const FilterAccount = () => {
         <SelectValue placeholder="Select Account" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="all">All</SelectItem>
+        <SelectItem value="all">All Account</SelectItem>
         {dataAccount?.map((account) => (
           <SelectItem key={account.id} value={account.id}>
             {account.name}
