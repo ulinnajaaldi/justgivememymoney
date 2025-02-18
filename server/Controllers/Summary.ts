@@ -145,15 +145,19 @@ const summary = new Hono().get(
 
     const activeDays = await db
       .select({
-        date: transactionsTable.date,
-        income:
-          sql`SUM(CASE WHEN ${transactionsTable.amount} >= 0 THEN ${transactionsTable.amount} ELSE 0 END)`.mapWith(
-            Number,
-          ),
-        expenses:
-          sql`SUM(CASE WHEN ${transactionsTable.amount} < 0 THEN ABS(${transactionsTable.amount}) ELSE 0 END)`.mapWith(
-            Number,
-          ),
+        date: sql`DATE(${transactionsTable.date})::date`.mapWith(
+          (date: string) => new Date(date),
+        ),
+        income: sql`COALESCE(SUM(
+        CASE WHEN ${transactionsTable.amount} >= 0 
+        THEN ${transactionsTable.amount} 
+        ELSE 0 END
+      ), 0)`.mapWith(Number),
+        expenses: sql`COALESCE(ABS(SUM(
+        CASE WHEN ${transactionsTable.amount} < 0 
+        THEN ${transactionsTable.amount} 
+        ELSE 0 END
+      )), 0)`.mapWith(Number),
       })
       .from(transactionsTable)
       .innerJoin(
@@ -168,8 +172,8 @@ const summary = new Hono().get(
           lte(transactionsTable.date, endDate),
         ),
       )
-      .groupBy(transactionsTable.date)
-      .orderBy(transactionsTable.date);
+      .groupBy(sql`DATE(${transactionsTable.date})`)
+      .orderBy(sql`DATE(${transactionsTable.date})`);
 
     const days = fillMissingDays(activeDays, startDate, endDate);
 

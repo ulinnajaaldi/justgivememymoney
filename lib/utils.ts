@@ -3,7 +3,6 @@ import {
   eachDayOfInterval,
   endOfDay,
   format,
-  isSameDay,
   isValid,
   parseISO,
   startOfDay,
@@ -53,9 +52,22 @@ export function fillMissingDays(
 
   const allDays = eachDayOfInterval({ start: startDate, end: endDate });
 
+  const dailyTotalsMap = new Map(
+    activeDays.map((day) => [
+      format(day.date, "yyyy-MM-dd", { locale: LOCALE_ID }),
+      { income: day.income, expenses: day.expenses },
+    ]),
+  );
+
   return allDays.map((day) => {
-    const found = activeDays.find((d) => isSameDay(d.date, day));
-    return found || { date: day, income: 0, expenses: 0 };
+    const dayKey = format(day, "yyyy-MM-dd", { locale: LOCALE_ID });
+    const dailyTotal = dailyTotalsMap.get(dayKey);
+
+    return {
+      date: day,
+      income: dailyTotal ? dailyTotal.income : 0,
+      expenses: dailyTotal ? dailyTotal.expenses : 0,
+    };
   });
 }
 
