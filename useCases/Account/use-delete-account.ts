@@ -20,7 +20,7 @@ const useDeleteAccount = (id?: string) => {
     onSuccess: () => {
       toast.success("Account deleted");
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
-      // TODO: Also invalidate summary
+      queryClient.invalidateQueries({ queryKey: ["summary"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
     onError: () => {
