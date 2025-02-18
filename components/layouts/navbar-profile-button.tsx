@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import { useMediaQuery } from "@/hook/useMediaQuery";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { LogOutIcon } from "lucide-react";
 import Link from "next/link";
@@ -27,6 +26,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import { useMediaQuery } from "@/hook/useMediaQuery";
 
 interface NavbarProfileButtonProps {
   actionLink: Url | string;
@@ -58,7 +59,7 @@ const NavbarProfileButton: React.FC<NavbarProfileButtonProps> = ({
             </Avatar>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="end">
           <div>
             <DropdownMenuLabel className="flex flex-col">
               <span>{user?.fullName}</span>
