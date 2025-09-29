@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     default: "Just Give Me My Money",
   },
   description: "Its your money, you should have it. LOL",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: "cover",
+  },
 };
 
 export default function RootLayout({

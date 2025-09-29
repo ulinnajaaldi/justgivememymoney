@@ -1,4 +1,4 @@
-import { type ClassValue, clsx } from "clsx";
+import { clsx, type ClassValue } from "clsx"
 import {
   eachDayOfInterval,
   endOfDay,
@@ -9,11 +9,12 @@ import {
   subDays,
 } from "date-fns";
 import { id as LOCALE_ID } from "date-fns/locale";
-import { twMerge } from "tailwind-merge";
+import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
+
 
 export function convertAmountToMiliUnit(amount: number) {
   return Math.round(amount * 1000);

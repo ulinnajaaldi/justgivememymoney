@@ -3,7 +3,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { FormValues } from ".";
 
 export type FormAddTransactionProps = {
-  form: UseFormReturn<FormValues, any, undefined>;
+  form: UseFormReturn<FormValues, any, FormValues>;
   handleSubmit: (data: any) => void;
   disabled: boolean;
   isLoading: boolean;

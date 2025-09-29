@@ -17,7 +17,7 @@ const OverviewFeature = () => {
   const { data, isLoading } = useGetSummary();
 
   return (
-    <main className="container my-3 space-y-5 md:my-4 lg:my-5">
+    <main className="custom-container my-3 space-y-5 md:my-4 lg:my-5">
       <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
         <h1 className="text-xl font-semibold sm:text-2xl md:text-3xl">
           Overview

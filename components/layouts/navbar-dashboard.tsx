@@ -33,7 +33,7 @@ const NavbarDashboard: React.FC = () => {
   }, []);
 
   return (
-    <nav className="container fixed left-0 right-0 top-0 z-40 max-h-[7vh] bg-white">
+    <nav className="custom-container fixed top-0 right-0 left-0 z-40 max-h-[7vh] bg-white">
       {isMobile ? (
         <div className="my-3 flex items-center justify-between">
           <Link href={ROUTES_PATH.home}>
@@ -51,9 +51,9 @@ const NavbarDashboard: React.FC = () => {
             </Drawer.Trigger>
             <Drawer.Portal>
               <Drawer.Overlay className="fixed inset-0 z-50 bg-black/40" />
-              <Drawer.Content className="fixed bottom-0 right-0 z-50 mt-24 flex h-full w-full flex-col rounded-t-[10px] bg-white lg:w-[400px] lg:bg-transparent">
+              <Drawer.Content className="fixed right-0 bottom-0 z-50 mt-24 flex h-full w-full flex-col rounded-t-[10px] bg-white lg:w-[400px] lg:bg-transparent">
                 <div className="relative m-0 flex h-full flex-1 rounded-l-lg bg-white p-4 md:m-2 lg:rounded-lg">
-                  <div className="my-auto mr-2 h-[100px] w-2 rounded-full bg-muted" />
+                  <div className="bg-muted my-auto mr-2 h-[100px] w-2 rounded-full" />
                   <div className="mx-auto w-full">
                     <Drawer.Title className="mb-4 inline-flex w-full items-center gap-2 border-b pb-2 font-medium">
                       <Logo className="h-8 w-8" />{" "}

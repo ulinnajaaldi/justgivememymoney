@@ -15,7 +15,7 @@ import NavbarProfileButton from "./navbar-profile-button";
 const NavbarHome: React.FC = () => {
   const { isSignedIn } = useAuth();
   return (
-    <nav className="container my-2 flex items-center justify-between">
+    <nav className="custom-container my-2 flex items-center justify-between">
       <Logo className="h-10 w-10" />
       <div>
         {isSignedIn ? (

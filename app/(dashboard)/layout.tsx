@@ -3,6 +3,8 @@ import React from "react";
 import NavbarDashboard from "@/components/layouts/navbar-dashboard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+export const dynamic = "force-dynamic";
+
 export default function DashboardLayout({
   children,
 }: Readonly<{

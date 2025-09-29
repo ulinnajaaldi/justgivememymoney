@@ -99,7 +99,7 @@ const CategoriesFeature = () => {
   };
 
   return (
-    <main className="container mt-5">
+    <main className="custom-container mt-5">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold sm:text-2xl md:text-3xl">
           Categories Management
@@ -130,7 +130,7 @@ const CategoriesFeature = () => {
           isLoading={categoryQuery.isLoading}
         />
       </div>
-      <Separator className="mb-1 mt-5" />
+      <Separator className="mt-5 mb-1" />
       {categoriesQuery.isLoading ? (
         <div className="flex h-[20vh] animate-pulse items-center justify-center rounded-md bg-neutral-100">
           <LoaderCircle className="size-6 animate-spin text-neutral-800" />
