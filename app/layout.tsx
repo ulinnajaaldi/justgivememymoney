@@ -4,6 +4,7 @@ import { Public_Sans } from "next/font/google";
 
 import Providers from "@/components/layouts/providers";
 
+// @ts-ignore
 import "./globals.css";
 
 const publicSans = Public_Sans({ subsets: ["latin"] });
@@ -14,13 +15,6 @@ export const metadata: Metadata = {
     default: "Just Give Me My Money",
   },
   description: "Its your money, you should have it. LOL",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: "cover",
-  },
 };
 
 export default function RootLayout({
