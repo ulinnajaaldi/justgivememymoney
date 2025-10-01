@@ -26,7 +26,7 @@ export type DataChartProps = {
 const chartConfig = {
   spending: {
     label: "Spending",
-    color: "hsl(var(--chart-1))",
+    color: "var(--color-chart-1)",
   },
 } satisfies ChartConfig;
 
@@ -38,7 +38,7 @@ const SpendingSection: React.FC<DataChartProps> = ({ data }) => {
   };
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <div className="xs:flex-row xs:items-center flex flex-col items-start justify-between gap-2 sm:gap-0">
           <CardTitle>Categories</CardTitle>
@@ -68,12 +68,12 @@ const SpendingSection: React.FC<DataChartProps> = ({ data }) => {
       </CardHeader>
       <CardContent>
         {data?.length === 0 ? (
-          <div className="xs:h-[350px] flex h-[200px] flex-col items-center justify-center text-muted-foreground">
+          <div className="xs:h-[350px] text-muted-foreground flex h-full flex-col items-center justify-center">
             <FileSearch className="size-6" />
             <p>No data for this period</p>
           </div>
         ) : (
-          <div className="xs:h-[350px] h-[200px]">
+          <div className="xs:h-[350px] h-full">
             {chartType === "pie" && (
               <ChartPieVariant data={data} chartConfig={chartConfig} />
             )}

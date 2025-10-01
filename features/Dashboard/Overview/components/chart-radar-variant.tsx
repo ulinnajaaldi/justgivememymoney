@@ -17,11 +17,11 @@ import { formatCurrency, formatPercentage } from "@/lib/utils";
 import type { ChartPropsCategory } from "../types";
 
 const COLOR = [
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
+  "var(--color-chart-3)",
+  "var(--color-chart-2)",
+  "var(--color-chart-1)",
+  "var(--color-chart-4)",
+  "var(--color-chart-5)",
 ];
 
 const ChartRadarVariant: React.FC<ChartPropsCategory> = ({
@@ -47,8 +47,8 @@ const ChartRadarVariant: React.FC<ChartPropsCategory> = ({
                   {name}
                 </p>
                 <div className="mt-1 flex space-x-2">
-                  <p className="text-sm text-muted-foreground">Expenses</p>
-                  <p className="text-sm font-medium text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">Expenses</p>
+                  <p className="text-muted-foreground text-sm font-medium">
                     {formatCurrency(value * -1)}
                   </p>
                 </div>
@@ -67,8 +67,8 @@ const ChartRadarVariant: React.FC<ChartPropsCategory> = ({
         />
         <Radar
           dataKey="value"
-          stroke="hsl(var(--chart-1))"
-          fill="hsl(var(--chart-1))"
+          stroke="var(--color-chart-1)"
+          fill="var(--color-chart-1)"
           fillOpacity={0.6}
         />
       </RadarChart>
