@@ -53,7 +53,6 @@ export const useConfirm = (
     isMobile ? (
       <Drawer open={promise !== null} shouldScaleBackground>
         <DrawerContent>
-          <div className="bg-muted mx-auto mt-4 h-2 w-[100px] rounded-full" />
           <DrawerHeader className="text-left">
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{message}</DrawerDescription>

@@ -28,6 +28,7 @@ const FormDrawer: React.FC<FormDrawerProps> = (props) => {
       direction="right"
       open={isOpen}
       onOpenChange={(isOpen) => !isOpen && closeDrawer()}
+      repositionInputs={false}
     >
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-50 bg-black/40" />
@@ -39,36 +40,27 @@ const FormDrawer: React.FC<FormDrawerProps> = (props) => {
         >
           <div
             className={cn(
-              "relative m-0 flex flex-1 gap-2 bg-white p-2 py-4 md:m-2 md:rounded-l-lg lg:rounded-lg",
+              "relative m-0 mb-2 flex flex-1 gap-2 overflow-auto bg-white p-2 py-4 md:m-2 md:rounded-l-lg lg:rounded-lg",
               isMobile ? "h-[100dvh] min-h-0" : "h-full",
             )}
           >
             <div className="bg-muted my-auto ml-1 h-[100px] w-2 flex-shrink-0 rounded-full" />
-            <ScrollArea
-              className={cn(
-                "w-full",
-                isMobile ? "h-[calc(100dvh-2rem)]" : "h-full md:h-[94dvh]",
-              )}
+
+            <div
+              className={cn("mx-auto w-full pr-3 pl-1", isMobile ? "pb-6" : "")}
             >
-              <div
-                className={cn(
-                  "mx-auto w-full pr-3 pl-1",
-                  isMobile ? "pb-6" : "",
+              <div className="mb-4">
+                <Drawer.Title className="inline-flex w-full items-center gap-2 text-sm font-medium md:text-base">
+                  {title}
+                </Drawer.Title>
+                {description && (
+                  <Drawer.Description className="text-xs text-neutral-500 md:text-sm">
+                    {description}
+                  </Drawer.Description>
                 )}
-              >
-                <div className="mb-4">
-                  <Drawer.Title className="inline-flex w-full items-center gap-2 text-sm font-medium md:text-base">
-                    {title}
-                  </Drawer.Title>
-                  {description && (
-                    <Drawer.Description className="text-xs text-neutral-500 md:text-sm">
-                      {description}
-                    </Drawer.Description>
-                  )}
-                </div>
-                {children}
               </div>
-            </ScrollArea>
+              {children}
+            </div>
           </div>
         </Drawer.Content>
       </Drawer.Portal>
