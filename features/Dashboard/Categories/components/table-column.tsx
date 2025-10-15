@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { InferResponseType } from "hono";
 import { ArrowUpDown } from "lucide-react";
 
+import { IconifyIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -48,9 +49,28 @@ export const columns: ColumnDef<ResponseType>[] = [
           className="pl-0 hover:bg-transparent"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Name
+          Category
           <ArrowUpDown className="ml-2 size-3" />
         </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const icon = row.original.icon;
+      const iconColor = row.original.iconColor || "#171717";
+      const name = row.original.name;
+
+      return (
+        <div className="flex items-center gap-1">
+          {icon && (
+            <IconifyIcon
+              icon={icon}
+              color={iconColor}
+              size={20}
+              className="flex-shrink-0"
+            />
+          )}
+          <span>{name}</span>
+        </div>
       );
     },
   },

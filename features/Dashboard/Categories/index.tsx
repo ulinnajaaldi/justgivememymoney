@@ -1,102 +1,22 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle, PlusIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { DataTable } from "@/components/common/data-table";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-import { insertCategoriesSchema } from "@/server/schema";
-
-import {
-  useBulkDeleteCategory,
-  useCreateCategory,
-  useDeleteCategory,
-  useEditCategory,
-  useGetCategories,
-  useGetCategory,
-} from "@/useCases/Category";
-
-import { useConfirm } from "@/hook/useConfirm";
 import useDrawer from "@/hook/useDrawer";
 
 import { columns, FormAddCategory, FormEditCategory } from "./components";
-
-const formSchema = insertCategoriesSchema.pick({
-  name: true,
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { useCategories } from "./hook";
 
 const CategoriesFeature = () => {
-  const { openDrawer, closeDrawer, id } = useDrawer();
-
-  const [ConfirmDelete, confirm] = useConfirm(
-    "Are you sure",
-    "You are about to perform a delete operation. This action cannot be undone.",
-  );
-
-  const mutation = useCreateCategory();
-  const editMutation = useEditCategory(id);
-  const deleteMutation = useDeleteCategory(id);
-  const categoryQuery = useGetCategory(id);
-  const categoriesQuery = useGetCategories();
-  const deleteCategory = useBulkDeleteCategory();
-
-  const isFormEditPending = editMutation.isPending || deleteMutation.isPending;
-
-  const isFormDeletePending =
-    categoriesQuery.isLoading || deleteCategory.isPending;
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-    },
-  });
-
-  useEffect(() => {
-    if (categoryQuery.data) {
-      form.reset({
-        name: categoryQuery.data.name,
-      });
-    }
-  }, [categoryQuery.data, form]);
-
-  const handleSubmit = (values: FormValues) => {
-    mutation.mutate(values, {
-      onSuccess: () => {
-        closeDrawer();
-        form.reset();
-      },
-    });
-  };
-
-  const handleEditSubmit = (values: FormValues) => {
-    editMutation.mutate(values, {
-      onSuccess: () => {
-        closeDrawer();
-        form.reset();
-      },
-    });
-  };
-
-  const handleDelete = async () => {
-    const ok = await confirm();
-    if (ok) {
-      deleteMutation.mutate(undefined, {
-        onSuccess: () => {
-          closeDrawer();
-          form.reset();
-        },
-      });
-    }
-  };
+  const { openDrawer } = useDrawer();
+  const { form, categoriesQuery, isFormDeletePending, deleteCategory } =
+    useCategories();
 
   return (
     <main className="custom-container mt-5">
@@ -116,19 +36,8 @@ const CategoriesFeature = () => {
           <PlusIcon className="mr-2 h-5 w-5" />
           Add New
         </Button>
-        <FormAddCategory
-          form={form}
-          handleSubmit={handleSubmit}
-          disabled={mutation.isPending}
-        />
-        <FormEditCategory
-          ConfirmDelete={ConfirmDelete}
-          disabled={isFormEditPending}
-          form={form}
-          handleDelete={handleDelete}
-          handleEditSubmit={handleEditSubmit}
-          isLoading={categoryQuery.isLoading}
-        />
+        <FormAddCategory />
+        <FormEditCategory />
       </div>
       <Separator className="mt-5 mb-1" />
       {categoriesQuery.isLoading ? (

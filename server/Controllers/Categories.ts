@@ -23,6 +23,8 @@ const categories = new Hono()
         id: categoriesTable.id,
         name: categoriesTable.name,
         userId: categoriesTable.userId,
+        icon: categoriesTable.icon,
+        iconColor: categoriesTable.iconColor,
       })
       .from(categoriesTable)
       .where(eq(categoriesTable.userId, auth.userId));
@@ -59,6 +61,8 @@ const categories = new Hono()
           id: categoriesTable.id,
           name: categoriesTable.name,
           userId: categoriesTable.userId,
+          icon: categoriesTable.icon,
+          iconColor: categoriesTable.iconColor,
         })
         .from(categoriesTable)
         .where(
@@ -84,6 +88,8 @@ const categories = new Hono()
       "json",
       insertCategoriesSchema.pick({
         name: true,
+        icon: true,
+        iconColor: true,
       }),
     ),
     async (c) => {
@@ -156,6 +162,8 @@ const categories = new Hono()
       "json",
       insertCategoriesSchema.pick({
         name: true,
+        icon: true,
+        iconColor: true,
       }),
     ),
     async (c) => {
