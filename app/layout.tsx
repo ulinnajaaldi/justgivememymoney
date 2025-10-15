@@ -4,6 +4,7 @@ import { Public_Sans } from "next/font/google";
 
 import Providers from "@/components/layouts/providers";
 
+// @ts-ignore
 import "./globals.css";
 
 const publicSans = Public_Sans({ subsets: ["latin"] });

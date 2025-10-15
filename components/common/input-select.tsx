@@ -46,6 +46,7 @@ const InputSelect: React.FC<InputSelectProps> = (props) => {
           ":hover": {
             borderColor: "#e2e8f0",
           },
+          borderRadius: 8,
         }),
       }}
       value={formattedValue}

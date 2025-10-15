@@ -15,7 +15,7 @@ export const TransactionsLoader = () => {
         </div>
       </CardHeader>
       <CardContent className="flex h-[350px] items-center justify-center">
-        <Loader2 className="animate-spin text-muted-foreground" />
+        <Loader2 className="text-muted-foreground animate-spin" />
       </CardContent>
     </Card>
   );
@@ -31,7 +31,7 @@ export const CategoriesLoader = () => {
         </div>
       </CardHeader>
       <CardContent className="flex h-[350px] items-center justify-center">
-        <Loader2 className="animate-spin text-muted-foreground" />
+        <Loader2 className="text-muted-foreground animate-spin" />
       </CardContent>
     </Card>
   );

@@ -53,7 +53,6 @@ export const useConfirm = (
     isMobile ? (
       <Drawer open={promise !== null} shouldScaleBackground>
         <DrawerContent>
-          <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
           <DrawerHeader className="text-left">
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{message}</DrawerDescription>
@@ -68,7 +67,7 @@ export const useConfirm = (
       </Drawer>
     ) : (
       <Dialog open={promise !== null}>
-        <DialogContent disableClose>
+        <DialogContent showCloseButton={false}>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{message}</DialogDescription>

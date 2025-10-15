@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
-  PopoverClose,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
@@ -76,7 +75,7 @@ const FilterDate: React.FC<{
           className="w-full sm:w-auto"
         >
           <span>{formatDateRange(paramState)}</span>
-          <ChevronDown className="ml-2 h-5 w-5 text-muted-foreground" />
+          <ChevronDown className="text-muted-foreground ml-2 h-5 w-5" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full" align="end">
@@ -89,15 +88,13 @@ const FilterDate: React.FC<{
           numberOfMonths={isMobile ? 1 : 2}
         />
         <div className="grid grid-cols-2 gap-5">
-          <PopoverClose asChild>
-            <Button
-              onClick={onReset}
-              variant="outline"
-              disabled={!date?.from || !date?.to || disabled}
-            >
-              Reset
-            </Button>
-          </PopoverClose>
+          <Button
+            onClick={onReset}
+            variant="outline"
+            disabled={!date?.from || !date?.to || disabled}
+          >
+            Reset
+          </Button>
           <Button
             onClick={() => {
               pushToUrl(date);

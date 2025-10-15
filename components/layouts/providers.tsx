@@ -1,4 +1,3 @@
-// In Next.js, this file would be called: app/providers.jsx
 "use client";
 
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
@@ -11,29 +10,28 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { Toaster } from "../ui/sonner";
 
-// In Next.js, this file would be called: app/providers.jsx
-
-// In Next.js, this file would be called: app/providers.jsx
-
-// In Next.js, this file would be called: app/providers.jsx
-
-// In Next.js, this file would be called: app/providers.jsx
-
-// In Next.js, this file would be called: app/providers.jsx
-
-// In Next.js, this file would be called: app/providers.jsx
-
-// In Next.js, this file would be called: app/providers.jsx
-
-// In Next.js, this file would be called: app/providers.jsx
-
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        // With SSR, we usually want to set some default staleTime
-        // above 0 to avoid refetching immediately on the client
-        staleTime: 60 * 1000,
+        // When data needs to be refresh 5 minutes
+        staleTime: 5 * 60 * 1000,
+        // Cache data for 10 minutes
+        gcTime: 10 * 60 * 1000,
+
+        retry: (failureCount, error) => {
+          if (
+            error instanceof Error &&
+            (error.message.includes("401") ||
+              error.message.includes("403") ||
+              error.message.includes("404"))
+          ) {
+            return false;
+          }
+          return failureCount < 3;
+        },
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: true,
       },
     },
   });
@@ -60,17 +58,13 @@ const Providers: React.FC<
     children: React.ReactNode;
   }>
 > = ({ children }) => {
-  // NOTE: Avoid useState when initializing the query client if you don't
-  //       have a suspense boundary between this and the code that may
-  //       suspend because React will throw away the client on the initial
-  //       render if it suspends and there is no boundary
   const queryClient = getQueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
       <div
         vaul-drawer-wrapper=""
-        className="max-h-[100vh] min-h-[100vh] overflow-hidden bg-background"
+        className="bg-background max-h-[100vh] min-h-[100vh] overflow-hidden"
       >
         {children}
       </div>

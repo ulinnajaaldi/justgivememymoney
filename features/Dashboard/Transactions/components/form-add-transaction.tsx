@@ -181,7 +181,8 @@ const FormAddCategory: React.FC<FormAddTransactionProps> = (props) => {
                       {...field}
                       value={field.value ?? ""}
                       placeholder="Optional Note"
-                      className="resize-none"
+                      className="max-h-[120px] min-h-[80px] resize-none"
+                      rows={3}
                     />
                   </FormControl>
                   <FormMessage />

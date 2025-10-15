@@ -5,11 +5,11 @@ import { ChartConfig } from "@/components/ui/chart";
 export const chartConfig = {
   income: {
     label: "Income",
-    color: "hsl(var(--chart-2))",
+    color: "var(--color-chart-2)",
   },
   expenses: {
     label: "Expenses",
-    color: "hsl(var(--chart-1))",
+    color: "var(--color-chart-1)",
   },
 } satisfies ChartConfig;
 

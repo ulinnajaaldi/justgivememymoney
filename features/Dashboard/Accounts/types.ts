@@ -12,5 +12,5 @@ export type FormEditAccountProps = {
   isLoading: boolean;
   handleEditSubmit: (data: any) => void;
   handleDelete: () => void;
-  ConfirmDelete: () => JSX.Element;
+  ConfirmDelete: () => any;
 };

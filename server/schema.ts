@@ -22,6 +22,8 @@ export const categoriesTable = pgTable("categories", {
   plainId: text("plain_id"),
   name: text("name").notNull(),
   userId: text("user_id").notNull(),
+  icon: text("icon"),
+  iconColor: text("icon_color"),
 });
 
 export const categoryRelationsTable = relations(

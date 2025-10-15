@@ -29,7 +29,7 @@ import { convertAmountToMiliUnit } from "@/lib/utils";
 import { columns, FormAddTransaction, FormEditTransaction } from "./components";
 
 const formSchema = z.object({
-  date: z.coerce.date(),
+  date: z.date(),
   accountId: z.string(),
   categoryId: z.string().nullable().optional(),
   payee: z.string().min(1),
@@ -164,7 +164,7 @@ const TransactionsFeature = () => {
   };
 
   return (
-    <main className="container mt-5">
+    <main className="custom-container mt-5">
       <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center sm:gap-0">
         <h1 className="text-2xl font-semibold sm:text-3xl">
           Transcations History
@@ -224,7 +224,7 @@ const TransactionsFeature = () => {
           onCreateCategory={onCreateCategory}
         />
       </div>
-      <Separator className="mb-1 mt-5" />
+      <Separator className="mt-5 mb-1" />
       {transactionsQuery.isLoading ? (
         <div className="flex h-[20vh] animate-pulse items-center justify-center rounded-md bg-neutral-100">
           <LoaderCircle className="size-6 animate-spin text-neutral-800" />
