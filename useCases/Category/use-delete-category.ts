@@ -4,6 +4,10 @@ import { toast } from "sonner";
 
 import { client } from "@/lib/hono";
 
+import { CATEGORY_QKEY } from ".";
+import { SUMMARY_QKEY } from "../Summary";
+import { TRANSACTION_QKEY } from "../Transactions";
+
 type DeleteCategoryResType = InferResponseType<
   (typeof client.api.categories)[":id"]["$delete"]
 >;
@@ -17,14 +21,18 @@ const useDeleteCategory = (id?: string) => {
       });
       return await response.json();
     },
-    onSuccess: () => {
-      toast.success("Category deleted");
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-      queryClient.invalidateQueries({ queryKey: ["summary"] });
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries({ queryKey: CATEGORY_QKEY.ALL });
+      queryClient.invalidateQueries({
+        queryKey: SUMMARY_QKEY.ALL_WITHOUT_FILTER,
+      });
+      queryClient.invalidateQueries({
+        queryKey: TRANSACTION_QKEY.ALL_WITHOUT_FILTER,
+      });
     },
-    onError: () => {
-      toast.error("Failed to delete Category");
+    onError: (error: Error) => {
+      toast.error(error.name || "Failed to delete category");
     },
   });
 

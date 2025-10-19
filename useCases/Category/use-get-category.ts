@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/hono";
 
-const useGetCategory = (id?: string) => {
+import { ACCOUNT_QKEY } from "../Account";
+
+const useGetCategory = (id: string) => {
   const query = useQuery({
-    enabled: !!id,
-    queryKey: ["category", { id }],
+    queryKey: ACCOUNT_QKEY.DETAIL(id),
     queryFn: async () => {
       const response = await client.api.categories[":id"].$get({
         param: { id },
@@ -15,10 +16,12 @@ const useGetCategory = (id?: string) => {
         throw new Error("Failed to fetch category");
       }
 
-      const { data } = await response.json();
-
-      return data;
+      return await response.json();
     },
+    select: (data) => {
+      return data.data;
+    },
+    enabled: !!id,
   });
 
   return query;

@@ -6,9 +6,10 @@ import * as z from "zod";
 
 export const accountsTable = pgTable("accounts", {
   id: text("id").primaryKey().$defaultFn(createId),
-  plainId: text("plain_id"),
   name: text("name").notNull(),
   userId: text("user_id").notNull(),
+  icon: text("icon"),
+  iconColor: text("icon_color"),
 });
 
 export const accountRelationsTable = relations(accountsTable, ({ many }) => ({
@@ -19,7 +20,6 @@ export const insertAccountsSchema = createInsertSchema(accountsTable);
 
 export const categoriesTable = pgTable("categories", {
   id: text("id").primaryKey().$defaultFn(createId),
-  plainId: text("plain_id"),
   name: text("name").notNull(),
   userId: text("user_id").notNull(),
   icon: text("icon"),

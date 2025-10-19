@@ -5,3 +5,12 @@ export { default as useEditTransaction } from "./use-edit-transaction";
 export { default as useDeleteTransaction } from "./use-delete-transaction";
 export { default as useBulkDeleteTransaction } from "./use-bulk-delete-transaction";
 export { default as useBulkCreateTransaction } from "./use-bulk-create-transaction";
+
+export const TRANSACTION_QKEY = {
+  ALL: (from: string, to: string, accountId: string) => [
+    "transactions",
+    { from, to, accountId },
+  ],
+  ALL_WITHOUT_FILTER: ["transactions"],
+  DETAIL: (id: string) => ["transaction", { id }],
+};

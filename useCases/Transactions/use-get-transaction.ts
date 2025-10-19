@@ -3,10 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { client } from "@/lib/hono";
 import { convertAmountFromMiliunits } from "@/lib/utils";
 
-const useGetTransaction = (id?: string) => {
+import { TRANSACTION_QKEY } from ".";
+
+const useGetTransaction = (id: string) => {
   const query = useQuery({
-    enabled: !!id,
-    queryKey: ["transaction", { id }],
+    queryKey: TRANSACTION_QKEY.DETAIL(id),
     queryFn: async () => {
       const response = await client.api.transactions[":id"].$get({
         param: { id },
@@ -23,6 +24,7 @@ const useGetTransaction = (id?: string) => {
         amount: convertAmountFromMiliunits(data.amount),
       };
     },
+    enabled: !!id,
   });
 
   return query;

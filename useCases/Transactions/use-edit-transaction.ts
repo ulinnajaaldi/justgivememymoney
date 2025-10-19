@@ -4,6 +4,9 @@ import { toast } from "sonner";
 
 import { client } from "@/lib/hono";
 
+import { TRANSACTION_QKEY } from ".";
+import { SUMMARY_QKEY } from "../Summary";
+
 type EditTransactionResType = InferResponseType<
   (typeof client.api.transactions)[":id"]["$patch"]
 >;
@@ -11,7 +14,7 @@ type EditTransactionReqType = InferRequestType<
   (typeof client.api.transactions)[":id"]["$patch"]
 >["json"];
 
-const useEditTransaction = (id?: string) => {
+const useEditTransaction = (id: string) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<
@@ -26,14 +29,18 @@ const useEditTransaction = (id?: string) => {
       });
       return await response.json();
     },
-    onSuccess: () => {
-      toast.success("Transaction updated");
-      queryClient.invalidateQueries({ queryKey: ["transaction", { id }] });
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
-      queryClient.invalidateQueries({ queryKey: ["summary"] });
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries({ queryKey: TRANSACTION_QKEY.DETAIL(id) });
+      queryClient.invalidateQueries({
+        queryKey: TRANSACTION_QKEY.ALL_WITHOUT_FILTER,
+      });
+      queryClient.invalidateQueries({
+        queryKey: SUMMARY_QKEY.ALL_WITHOUT_FILTER,
+      });
     },
-    onError: () => {
-      toast.error("Failed to update transaction");
+    onError: (error: Error) => {
+      toast.error(error.name || "Failed to update transaction");
     },
   });
 

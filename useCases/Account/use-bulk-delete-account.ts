@@ -4,6 +4,10 @@ import { toast } from "sonner";
 
 import { client } from "@/lib/hono";
 
+import { ACCOUNT_QKEY } from ".";
+import { SUMMARY_QKEY } from "../Summary";
+import { TRANSACTION_QKEY } from "../Transactions";
+
 type BulkDeleteAccountResType = InferResponseType<
   (typeof client.api.accounts)["bulk-delete"]["$post"]
 >;
@@ -23,11 +27,15 @@ const useBulkDeleteAccount = () => {
       const response = await client.api.accounts["bulk-delete"].$post({ json });
       return await response.json();
     },
-    onSuccess: () => {
-      toast.success("Account deleted");
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
-      queryClient.invalidateQueries({ queryKey: ["summary"] });
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries({ queryKey: ACCOUNT_QKEY.ALL });
+      queryClient.invalidateQueries({
+        queryKey: SUMMARY_QKEY.ALL_WITHOUT_FILTER,
+      });
+      queryClient.invalidateQueries({
+        queryKey: TRANSACTION_QKEY.ALL_WITHOUT_FILTER,
+      });
     },
     onError: () => {
       toast.error("Failed to delete accounts");

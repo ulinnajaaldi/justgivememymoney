@@ -44,38 +44,47 @@ const transactions = new Hono()
       const startDate = startOfDay(parseDate(from, defaultFrom));
       const endDate = endOfDay(parseDate(to, defaultTo));
 
-      const data = await db
-        .select({
-          id: transactionsTable.id,
-          amount: transactionsTable.amount,
-          date: transactionsTable.date,
-          payee: transactionsTable.payee,
-          notes: transactionsTable.notes,
-          category: categoriesTable.name,
-          categoryId: transactionsTable.categoryId,
-          account: accountsTable.name,
-          accountId: transactionsTable.accountId,
-        })
-        .from(transactionsTable)
-        .innerJoin(
-          accountsTable,
-          eq(transactionsTable.accountId, accountsTable.id),
-        )
-        .leftJoin(
-          categoriesTable,
-          eq(transactionsTable.categoryId, categoriesTable.id),
-        )
-        .where(
-          and(
-            accountId ? eq(transactionsTable.accountId, accountId) : undefined,
-            eq(accountsTable.userId, auth.userId),
-            gte(transactionsTable.date, startDate),
-            lte(transactionsTable.date, endDate),
-          ),
-        )
-        .orderBy(desc(transactionsTable.date));
+      try {
+        const data = await db
+          .select({
+            id: transactionsTable.id,
+            amount: transactionsTable.amount,
+            date: transactionsTable.date,
+            payee: transactionsTable.payee,
+            notes: transactionsTable.notes,
+            category: categoriesTable.name,
+            categoryId: transactionsTable.categoryId,
+            account: accountsTable.name,
+            accountId: transactionsTable.accountId,
+          })
+          .from(transactionsTable)
+          .innerJoin(
+            accountsTable,
+            eq(transactionsTable.accountId, accountsTable.id),
+          )
+          .leftJoin(
+            categoriesTable,
+            eq(transactionsTable.categoryId, categoriesTable.id),
+          )
+          .where(
+            and(
+              accountId
+                ? eq(transactionsTable.accountId, accountId)
+                : undefined,
+              eq(accountsTable.userId, auth.userId),
+              gte(transactionsTable.date, startDate),
+              lte(transactionsTable.date, endDate),
+            ),
+          )
+          .orderBy(desc(transactionsTable.date));
 
-      return c.json({ data });
+        return c.json({ data, message: "Transactions fetched successfully" });
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+        throw new HTTPException(500, {
+          res: c.json({ error: "Failed to fetch transactions" }, 500),
+        });
+      }
     },
   )
   .get(
@@ -103,39 +112,48 @@ const transactions = new Hono()
         });
       }
 
-      const [data] = await db
-        .select({
-          id: transactionsTable.id,
-          amount: transactionsTable.amount,
-          date: transactionsTable.date,
-          payee: transactionsTable.payee,
-          notes: transactionsTable.notes,
-          categoryId: transactionsTable.categoryId,
-          accountId: transactionsTable.accountId,
-        })
-        .from(transactionsTable)
-        .innerJoin(
-          accountsTable,
-          eq(transactionsTable.accountId, accountsTable.id),
-        )
-        .leftJoin(
-          categoriesTable,
-          eq(transactionsTable.categoryId, categoriesTable.id),
-        )
-        .where(
-          and(
-            eq(transactionsTable.id, id),
-            eq(accountsTable.userId, auth.userId),
-          ),
-        );
+      try {
+        const [data] = await db
+          .select({
+            id: transactionsTable.id,
+            amount: transactionsTable.amount,
+            date: transactionsTable.date,
+            payee: transactionsTable.payee,
+            notes: transactionsTable.notes,
+            categoryId: transactionsTable.categoryId,
+            accountId: transactionsTable.accountId,
+          })
+          .from(transactionsTable)
+          .innerJoin(
+            accountsTable,
+            eq(transactionsTable.accountId, accountsTable.id),
+          )
+          .leftJoin(
+            categoriesTable,
+            eq(transactionsTable.categoryId, categoriesTable.id),
+          )
+          .where(
+            and(
+              eq(transactionsTable.id, id),
+              eq(accountsTable.userId, auth.userId),
+            ),
+          );
 
-      if (!data) {
-        throw new HTTPException(404, {
-          res: c.json({ error: "Not found" }, 404),
+        if (!data) {
+          throw new HTTPException(404, {
+            res: c.json({ error: "Not found" }, 404),
+          });
+        }
+
+        return c.json({ data, message: "Transaction fetched successfully" });
+      } catch (error) {
+        if (error instanceof HTTPException) throw error;
+
+        console.error("Error fetching transaction:", error);
+        throw new HTTPException(500, {
+          res: c.json({ error: "Failed to fetch transaction" }, 500),
         });
       }
-
-      return c.json({ data });
     },
   )
   .post(
@@ -158,14 +176,21 @@ const transactions = new Hono()
         });
       }
 
-      const [data] = await db
-        .insert(transactionsTable)
-        .values({
-          ...values,
-        })
-        .returning();
+      try {
+        const [data] = await db
+          .insert(transactionsTable)
+          .values({
+            ...values,
+          })
+          .returning();
 
-      return c.json({ data });
+        return c.json({ data, message: "Transaction created successfully" });
+      } catch (error) {
+        console.error("Error creating transaction:", error);
+        throw new HTTPException(500, {
+          res: c.json({ error: "Failed to create transaction" }, 500),
+        });
+      }
     },
   )
   .post(
@@ -190,16 +215,23 @@ const transactions = new Hono()
         });
       }
 
-      const data = await db
-        .insert(transactionsTable)
-        .values(
-          values.map((value) => ({
-            ...value,
-          })),
-        )
-        .returning();
+      try {
+        const data = await db
+          .insert(transactionsTable)
+          .values(
+            values.map((value) => ({
+              ...value,
+            })),
+          )
+          .returning();
 
-      return c.json({ data });
+        return c.json({ data, message: "Transactions created successfully" });
+      } catch (error) {
+        console.error("Error creating transactions:", error);
+        throw new HTTPException(500, {
+          res: c.json({ error: "Failed to create transactions" }, 500),
+        });
+      }
     },
   )
   .post(
@@ -222,36 +254,43 @@ const transactions = new Hono()
         });
       }
 
-      const transactionsToDelete = db.$with("transactions_to_delete").as(
-        db
-          .select({ id: transactionsTable.id })
-          .from(transactionsTable)
-          .innerJoin(
-            accountsTable,
-            eq(transactionsTable.accountId, accountsTable.id),
-          )
-          .where(
-            and(
-              inArray(transactionsTable.id, values.ids),
-              eq(accountsTable.userId, auth.userId),
+      try {
+        const transactionsToDelete = db.$with("transactions_to_delete").as(
+          db
+            .select({ id: transactionsTable.id })
+            .from(transactionsTable)
+            .innerJoin(
+              accountsTable,
+              eq(transactionsTable.accountId, accountsTable.id),
+            )
+            .where(
+              and(
+                inArray(transactionsTable.id, values.ids),
+                eq(accountsTable.userId, auth.userId),
+              ),
             ),
-          ),
-      );
+        );
 
-      const data = await db
-        .with(transactionsToDelete)
-        .delete(transactionsTable)
-        .where(
-          inArray(
-            transactionsTable.id,
-            sql`(SELECT id FROM ${transactionsToDelete})`,
-          ),
-        )
-        .returning({
-          id: transactionsTable.id,
+        const data = await db
+          .with(transactionsToDelete)
+          .delete(transactionsTable)
+          .where(
+            inArray(
+              transactionsTable.id,
+              sql`(SELECT id FROM ${transactionsToDelete})`,
+            ),
+          )
+          .returning({
+            id: transactionsTable.id,
+          });
+
+        return c.json({ message: "Deleted successfully", data });
+      } catch (error) {
+        console.error("Error deleting transactions:", error);
+        throw new HTTPException(500, {
+          res: c.json({ error: "Failed to delete transactions" }, 500),
         });
-
-      return c.json({ message: "Deleted successfully", data });
+      }
     },
   )
   .patch(
@@ -286,41 +325,48 @@ const transactions = new Hono()
         });
       }
 
-      const transactionsToUpdate = db.$with("transactions_to_update").as(
-        db
-          .select({ id: transactionsTable.id })
-          .from(transactionsTable)
-          .innerJoin(
-            accountsTable,
-            eq(transactionsTable.accountId, accountsTable.id),
-          )
-          .where(
-            and(
-              eq(transactionsTable.id, id),
-              eq(accountsTable.userId, auth.userId),
+      try {
+        const transactionsToUpdate = db.$with("transactions_to_update").as(
+          db
+            .select({ id: transactionsTable.id })
+            .from(transactionsTable)
+            .innerJoin(
+              accountsTable,
+              eq(transactionsTable.accountId, accountsTable.id),
+            )
+            .where(
+              and(
+                eq(transactionsTable.id, id),
+                eq(accountsTable.userId, auth.userId),
+              ),
             ),
-          ),
-      );
+        );
 
-      const [data] = await db
-        .with(transactionsToUpdate)
-        .update(transactionsTable)
-        .set(values)
-        .where(
-          inArray(
-            transactionsTable.id,
-            sql`(SELECT id FROM ${transactionsToUpdate})`,
-          ),
-        )
-        .returning();
+        const [data] = await db
+          .with(transactionsToUpdate)
+          .update(transactionsTable)
+          .set(values)
+          .where(
+            inArray(
+              transactionsTable.id,
+              sql`(SELECT id FROM ${transactionsToUpdate})`,
+            ),
+          )
+          .returning();
 
-      if (!data) {
-        throw new HTTPException(404, {
-          res: c.json({ error: "Not found" }, 404),
+        if (!data) {
+          throw new HTTPException(404, {
+            res: c.json({ error: "Not found" }, 404),
+          });
+        }
+
+        return c.json({ data, message: "Transaction updated successfully" });
+      } catch (error) {
+        console.error("Error updating transaction:", error);
+        throw new HTTPException(500, {
+          res: c.json({ error: "Failed to update transaction" }, 500),
         });
       }
-
-      return c.json({ data });
     },
   )
   .delete(
@@ -348,42 +394,51 @@ const transactions = new Hono()
         });
       }
 
-      const transactionsToDelete = db.$with("transactions_to_delete").as(
-        db
-          .select({ id: transactionsTable.id })
-          .from(transactionsTable)
-          .innerJoin(
-            accountsTable,
-            eq(transactionsTable.accountId, accountsTable.id),
-          )
-          .where(
-            and(
-              eq(transactionsTable.id, id),
-              eq(accountsTable.userId, auth.userId),
+      try {
+        const transactionsToDelete = db.$with("transactions_to_delete").as(
+          db
+            .select({ id: transactionsTable.id })
+            .from(transactionsTable)
+            .innerJoin(
+              accountsTable,
+              eq(transactionsTable.accountId, accountsTable.id),
+            )
+            .where(
+              and(
+                eq(transactionsTable.id, id),
+                eq(accountsTable.userId, auth.userId),
+              ),
             ),
-          ),
-      );
+        );
 
-      const [data] = await db
-        .with(transactionsToDelete)
-        .delete(transactionsTable)
-        .where(
-          inArray(
-            transactionsTable.id,
-            sql`(SELECT id FROM ${transactionsToDelete})`,
-          ),
-        )
-        .returning({
-          id: transactionsTable.id,
-        });
+        const [data] = await db
+          .with(transactionsToDelete)
+          .delete(transactionsTable)
+          .where(
+            inArray(
+              transactionsTable.id,
+              sql`(SELECT id FROM ${transactionsToDelete})`,
+            ),
+          )
+          .returning({
+            id: transactionsTable.id,
+          });
 
-      if (!data) {
-        throw new HTTPException(404, {
-          res: c.json({ error: "Not found" }, 404),
+        if (!data) {
+          throw new HTTPException(404, {
+            res: c.json({ error: "Not found" }, 404),
+          });
+        }
+
+        return c.json({ data, message: "Transaction deleted successfully" });
+      } catch (error) {
+        if (error instanceof HTTPException) throw error;
+
+        console.error("Error deleting transaction:", error);
+        throw new HTTPException(500, {
+          res: c.json({ error: "Failed to delete transaction" }, 500),
         });
       }
-
-      return c.json({ data });
     },
   );
 

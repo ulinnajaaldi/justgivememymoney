@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { client } from "@/lib/hono";
 import { convertAmountFromMiliunits } from "@/lib/utils";
 
+import { SUMMARY_QKEY } from ".";
+
 const useGetSummary = () => {
   const params = useSearchParams();
   const from = params.get("from") || "";
@@ -11,7 +13,7 @@ const useGetSummary = () => {
   const accountId = params.get("accountId") || "";
 
   const query = useQuery({
-    queryKey: ["summary", { from, to, accountId }],
+    queryKey: SUMMARY_QKEY.ALL(from, to, accountId),
     queryFn: async () => {
       const response = await client.api.summary.$get({
         query: { from, to, accountId },

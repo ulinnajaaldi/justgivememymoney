@@ -4,6 +4,10 @@ import { toast } from "sonner";
 
 import { client } from "@/lib/hono";
 
+import { ACCOUNT_QKEY } from ".";
+import { SUMMARY_QKEY } from "../Summary";
+import { TRANSACTION_QKEY } from "../Transactions";
+
 type EditAccountResType = InferResponseType<
   (typeof client.api.accounts)[":id"]["$patch"]
 >;
@@ -11,7 +15,7 @@ type EditAccountReqType = InferRequestType<
   (typeof client.api.accounts)[":id"]["$patch"]
 >["json"];
 
-const useEditAccount = (id?: string) => {
+const useEditAccount = (id: string) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<EditAccountResType, Error, EditAccountReqType>({
@@ -22,12 +26,16 @@ const useEditAccount = (id?: string) => {
       });
       return await response.json();
     },
-    onSuccess: () => {
-      toast.success("Account updated");
-      queryClient.invalidateQueries({ queryKey: ["account", { id }] });
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
-      queryClient.invalidateQueries({ queryKey: ["summary"] });
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries({ queryKey: ACCOUNT_QKEY.DETAIL(id) });
+      queryClient.invalidateQueries({ queryKey: ACCOUNT_QKEY.ALL });
+      queryClient.invalidateQueries({
+        queryKey: SUMMARY_QKEY.ALL_WITHOUT_FILTER,
+      });
+      queryClient.invalidateQueries({
+        queryKey: TRANSACTION_QKEY.ALL_WITHOUT_FILTER,
+      });
     },
     onError: () => {
       toast.error("Failed to update account");

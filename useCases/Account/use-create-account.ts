@@ -4,6 +4,8 @@ import { toast } from "sonner";
 
 import { client } from "@/lib/hono";
 
+import { ACCOUNT_QKEY } from ".";
+
 type CreateAccountResType = InferResponseType<typeof client.api.accounts.$post>;
 type CreateAccountReqType = InferRequestType<
   typeof client.api.accounts.$post
@@ -21,12 +23,12 @@ const useCreateAccount = () => {
       const response = await client.api.accounts.$post({ json });
       return await response.json();
     },
-    onSuccess: () => {
-      toast.success("Account created");
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries({ queryKey: ACCOUNT_QKEY.ALL });
     },
-    onError: () => {
-      toast.error("Failed to create account");
+    onError: (error: Error) => {
+      toast.error(error.name || "Failed to create account");
     },
   });
 

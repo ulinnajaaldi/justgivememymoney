@@ -4,3 +4,8 @@ export { default as useCreateAccount } from "./use-create-account";
 export { default as useEditAccount } from "./use-edit-account";
 export { default as useDeleteAccount } from "./use-delete-account";
 export { default as useBulkDeleteAccount } from "./use-bulk-delete-account";
+
+export const ACCOUNT_QKEY = {
+  ALL: ["accounts"],
+  DETAIL: (id: string) => ["account", { id }],
+};
