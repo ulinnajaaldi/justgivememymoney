@@ -48,9 +48,9 @@ const TransactionsFeature = () => {
   );
 
   const mutation = useCreateTransaction();
-  const editMutation = useEditTransaction(id);
+  const editMutation = useEditTransaction(id!);
   const deleteMutation = useDeleteTransaction(id);
-  const transactionQuery = useGetTransaction(id);
+  const transactionQuery = useGetTransaction(id!);
   const transactionsQuery = useGetTransactions();
 
   const deleteTransaction = useBulkDeleteTransaction();

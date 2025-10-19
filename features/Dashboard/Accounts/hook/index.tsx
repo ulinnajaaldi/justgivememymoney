@@ -3,43 +3,41 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import {
-  useBulkDeleteCategory,
-  useCreateCategory,
-  useDeleteCategory,
-  useEditCategory,
-  useGetCategories,
-  useGetCategory,
-} from "@/useCases/Category";
+  useBulkDeleteAccount,
+  useCreateAccount,
+  useDeleteAccount,
+  useEditAccount,
+  useGetAccount,
+  useGetAccounts,
+} from "@/useCases/Account";
 
 import { useConfirm } from "@/hook/useConfirm";
 import useDrawer from "@/hook/useDrawer";
 
 import { formSchema, FormValues } from "../types";
 
-interface CategoriesProps {
-  form: UseFormReturn<FormValues>;
+interface AccountsProps {
+  form: ReturnType<typeof useForm<FormValues>>;
   handleSubmit: (values: FormValues) => void;
-  mutation: ReturnType<typeof useCreateCategory>;
-  categoriesQuery: ReturnType<typeof useGetCategories>;
-  isFormDeletePending: boolean;
-  deleteCategory: ReturnType<typeof useBulkDeleteCategory>;
+  mutation: ReturnType<typeof useCreateAccount>;
+  accountsQuery: ReturnType<typeof useGetAccounts>;
+  deleteAccount: ReturnType<typeof useBulkDeleteAccount>;
   ConfirmDelete: React.FC;
-  isFormEditPending: boolean;
   handleDelete: () => void;
   handleEditSubmit: (values: FormValues) => void;
-  categoryQuery: ReturnType<typeof useGetCategory>;
-  editMutation: ReturnType<typeof useEditCategory>;
-  deleteMutation: ReturnType<typeof useDeleteCategory>;
+  accountQuery: ReturnType<typeof useGetAccount>;
+  editMutation: ReturnType<typeof useEditAccount>;
+  deleteMutation: ReturnType<typeof useDeleteAccount>;
   isWithIcon: boolean;
   setIsWithIcon: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Categories = createContext<CategoriesProps | undefined>(undefined);
+const Accounts = createContext<AccountsProps | undefined>(undefined);
 
-export const CategoriesStore: React.FC<{
+export const AccountsStore: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const { closeDrawer, id } = useDrawer();
@@ -50,17 +48,12 @@ export const CategoriesStore: React.FC<{
   );
   const [isWithIcon, setIsWithIcon] = useState<boolean>(false);
 
-  const mutation = useCreateCategory();
-  const editMutation = useEditCategory(id!);
-  const deleteMutation = useDeleteCategory(id);
-  const categoryQuery = useGetCategory(id!);
-  const categoriesQuery = useGetCategories();
-  const deleteCategory = useBulkDeleteCategory();
-
-  const isFormEditPending = editMutation.isPending || deleteMutation.isPending;
-
-  const isFormDeletePending =
-    categoriesQuery.isLoading || deleteCategory.isPending;
+  const mutation = useCreateAccount();
+  const editMutation = useEditAccount(id!);
+  const deleteMutation = useDeleteAccount(id);
+  const accountQuery = useGetAccount(id!);
+  const accountsQuery = useGetAccounts();
+  const deleteAccount = useBulkDeleteAccount();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -70,13 +63,13 @@ export const CategoriesStore: React.FC<{
   });
 
   useEffect(() => {
-    if (categoryQuery.data) {
+    if (accountQuery.data) {
       form.reset({
-        name: categoryQuery.data.name,
-        icon: categoryQuery.data.icon || "",
-        icon_color: categoryQuery.data.iconColor || "",
+        name: accountQuery.data.name,
+        icon: accountQuery.data.icon || "",
+        icon_color: accountQuery.data.iconColor || "",
       });
-      setIsWithIcon(!!categoryQuery.data.icon);
+      setIsWithIcon(!!accountQuery.data.icon);
     } else {
       form.reset({
         name: "",
@@ -85,7 +78,7 @@ export const CategoriesStore: React.FC<{
       });
       setIsWithIcon(false);
     }
-  }, [categoryQuery.data, form]);
+  }, [accountQuery.data, form]);
 
   const handleSubmit = (values: FormValues) => {
     mutation.mutate(
@@ -114,7 +107,6 @@ export const CategoriesStore: React.FC<{
         onSuccess: () => {
           closeDrawer();
           form.reset();
-          categoryQuery.refetch();
         },
       },
     );
@@ -133,34 +125,32 @@ export const CategoriesStore: React.FC<{
   };
 
   return (
-    <Categories.Provider
+    <Accounts.Provider
       value={{
         form,
-        handleSubmit,
-        mutation,
-        categoriesQuery,
-        isFormDeletePending,
-        deleteCategory,
-        ConfirmDelete,
-        isFormEditPending,
-        handleDelete,
-        handleEditSubmit,
-        categoryQuery,
-        editMutation,
-        deleteMutation,
         isWithIcon,
         setIsWithIcon,
+        handleSubmit,
+        ConfirmDelete,
+        handleEditSubmit,
+        handleDelete,
+        mutation,
+        editMutation,
+        deleteMutation,
+        accountQuery,
+        accountsQuery,
+        deleteAccount,
       }}
     >
       {children}
-    </Categories.Provider>
+    </Accounts.Provider>
   );
 };
 
-export const useCategories = () => {
-  const context = useContext(Categories);
+export const useAccounts = () => {
+  const context = useContext(Accounts);
   if (context === undefined) {
-    throw new Error("useCategories must be used within a Categories");
+    throw new Error("useAccounts must be used within a Accounts");
   }
   return context;
 };

@@ -49,7 +49,7 @@ export const columns: ColumnDef<ResponseType>[] = [
           className="pl-0 hover:bg-transparent"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Category
+          Category Name
           <ArrowUpDown className="ml-2 size-3" />
         </Button>
       );

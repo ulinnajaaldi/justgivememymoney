@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 import type { UseFormReturn } from "react-hook-form";
 
 import { FormValues } from ".";
